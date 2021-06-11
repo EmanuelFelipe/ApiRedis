@@ -1,0 +1,5 @@
+elH|elixir|um Elixir de vida|hp.1|1
+elM|elixir|um Elixir de Mana|mp.1|1
+elA|elixir|um Elixir de Ataque|at.1|1
+elD|elixir|um Elixir de Defesa|df.1|1
+elV|elixir|um Elixir de Velocidade|vl.1|1

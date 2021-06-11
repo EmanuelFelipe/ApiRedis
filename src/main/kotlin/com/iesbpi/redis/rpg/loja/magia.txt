@@ -1,0 +1,24 @@
+mag1|spell|Fogo 1|fg.10|10|10
+mag2|spell|Fogo 2|fg.20|20|20
+mag3|spell|Fogo 3|fg.30|30|30
+
+mag4|spell|Agua 1|ag.10|10|10
+mag5|spell|Agua 2|ag.20|20|20
+mag6|spell|Agua 3|ag.30|30|30
+
+mag7|spell|Natureza 1|nt.10|10|10
+mag8|spell|Natureza 2|nt.20|20|20
+mag9|spell|Natureza 3|ntg.30|30|30
+
+mag10|spell|Luz 1|lz.10|10|10
+mag11|spell|Luz 2|lz.20|20|20
+mag12|spell|Luz 3|lz.30|30|30
+
+mag13|spell|Escuridao 1|es.10|10|10
+mag14|spell|Escuridao 2|es.20|20|20
+mag15|spell|Escuridao 3|es.30|30|30
+
+mag16|spell|Cura 1|cr.10|10|10
+mag17|spell|Cura 2|cr.20|20|20
+mag18|spell|Cura 3|cr.30|30|30
+
