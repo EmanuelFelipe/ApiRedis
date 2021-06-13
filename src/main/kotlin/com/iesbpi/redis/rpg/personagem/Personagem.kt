@@ -3,6 +3,7 @@ package br.iesb.poo.rpg.personagem
 import com.iesbpi.redis.rpg.Rpg
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("Personagem")
 open class Personagem() {
@@ -13,13 +14,14 @@ open class Personagem() {
     }
     @Id
     var id: Int = -1
+    @Indexed
+    var userEmail: String = ""
 
-    var nome: String ?= null
+    @Indexed
+    open var nome: String ?= null
 
-    var sorte: Int = 0
     var nivel: Int = 1
     var dinheiro: Int = 10
-    var magia: Int = 0
 
     //Vai ser o local aonde vai armazenar as mudanças definitivas nos status
 
@@ -52,7 +54,7 @@ open class Personagem() {
     // Água - 1; Fogo - 2; Natureza - 3; Luz - 4; Escuridão - 5;
     // Água > Fogo > Natureza > Água || Luz > Escuridão > Luz
 
-    var elemento: Int ?= null
+    open var elemento: Int ?= null
 
     fun calcularDano(nivelAtacante: Int,
                      statusAtaqueAtacante: Int,

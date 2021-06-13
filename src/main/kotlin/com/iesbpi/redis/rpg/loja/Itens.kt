@@ -27,5 +27,10 @@ open class Itens(){
         return log
     }
 
+    open fun elemento(jogador: PersonagemJogador, elm: Int): String{
+        jogador.elemento = elm
+        return "teste"
+    }
+
 
 }

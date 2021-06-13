@@ -6,17 +6,28 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import kotlin.collections.ArrayList
 
-open class PersonagemJogador(
-    classeJogador: Int,
-    nomeJogador: String,
-    elementoJogador: Int,
-    rpgAtual: Rpg
-) : Personagem(nomeJogador, elementoJogador) {
+open class PersonagemJogador() : Personagem() {
+
+    constructor( classeJogador: Int,
+                 nomeJogador: String,
+                 elementoJogador: Int,
+                 usuarioEmail: String,
+                 rpgAtual: Rpg ): this(){
+        classe = classeJogador
+        id = genId(rpgAtual)
+        nome = nomeJogador
+        elemento = elementoJogador
+        userEmail = usuarioEmail
+
+    }
+
+    override var nome: String ?= null
+     //var elemento: Int ?= null
 
     //Arqueiro = 1; Cavaleiro = 2; Mago = 3(Não foi implementado ainda)
     //Arqueiro + Velocidade - maxVida; Cavaleiro + Ataque - maxMana; Mago + maxMana - Defesa
 
-    var classe: Int = classeJogador
+    var classe: Int ?= null
     private var xp: Int = 0
     var inventario = mutableListOf<ArrayList<String>>()
     var batalhas : Int = 1
@@ -29,10 +40,6 @@ open class PersonagemJogador(
 
     //var inventario = [[PotP, X], [PotM, y]...]
     //equipados = [arma,armadura]
-
-    init {
-        id = genId(rpgAtual)
-    }
 
     override fun genId(rpgAtual: Rpg): Int {
 
