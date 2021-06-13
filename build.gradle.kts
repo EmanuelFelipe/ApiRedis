@@ -25,8 +25,6 @@ dependencies {
 	implementation("io.lettuce:lettuce-core:6.0.2.RELEASE")
 	implementation ("com.google.code.gson:gson:2.8.7")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation ("io.ktor:ktor-server-netty:1.4.0")
-	implementation ("io.ktor:ktor-gson:1.4.0")
 }
 
 tasks.withType<KotlinCompile> {

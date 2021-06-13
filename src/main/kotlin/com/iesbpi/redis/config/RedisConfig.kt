@@ -22,8 +22,6 @@ import org.springframework.web.servlet.function.ServerResponse
 @Configuration
 class RedisConfig: CachingConfigurerSupport() {
 
-    val mapper = ObjectMapper()
-
     companion object{
         private val log = LoggerFactory.getLogger(javaClass)
     }
@@ -40,7 +38,7 @@ class RedisConfig: CachingConfigurerSupport() {
 
         return RedisTemplate<String, Any>().apply {
             setConnectionFactory(redisConnectionFactory())
-            keySerializer = RedisSerializer.string()
+            keySerializer = RedisSerializer.json()
         }
     }
 

@@ -4,6 +4,7 @@ package com.iesbpi.redis.rpg
 import br.iesb.poo.rpg.personagem.PersonagemJogador
 import br.iesb.poo.rpg.personagem.PersonagemMonstro
 import com.iesbpi.redis.config.RPG
+import com.iesbpi.redis.pessoas.IdPessoa
 
 enum class TipoPersonagem {
     PERSONAGEM_MONSTRO,
@@ -14,6 +15,7 @@ class Rpg {
 
     val jogadores = mutableListOf<PersonagemJogador>()
     val monstros = mutableListOf<PersonagemMonstro>()
+    val ids = mutableListOf<IdPessoa>()
 
     private val listaNomes = arrayOf(
         "Bei, ",
@@ -53,12 +55,13 @@ class Rpg {
             PersonagemMonstro(
                 novaRaca = 3,
                 (listaChefe).random(),
-                elementoMonstro = 1,
+                elementoMonstro = 4,
                 RPG
             )
         }
 
         monstros.add(novoPersonagem)
+
         return novoPersonagem
     }
 
