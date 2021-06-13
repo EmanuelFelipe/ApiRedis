@@ -41,6 +41,11 @@ class WebController0 {
         return personagemJogadorRepository.findByUserEmail(email).id
     }
 
+    @GetMapping("/jogadores/user/nome/{email}")
+    fun nomeJogador(@PathVariable email: String): String? {
+        return personagemJogadorRepository.findByUserEmail(email).nome
+    }
+
     @GetMapping("/jogador/deletar/{email}")
     fun deletar(@PathVariable email: String){
         val personagemDeletado = personagemJogadorRepository.findByUserEmail(email)
