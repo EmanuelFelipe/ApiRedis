@@ -19,7 +19,7 @@ val RPG: Rpg = Rpg()
 @RestController
 @RequestMapping(value = ["/api"])
 class WebController0 {
-    
+
     @Autowired
     lateinit var personagemJogadorRepository: PersonagemJogadorRepository
 
