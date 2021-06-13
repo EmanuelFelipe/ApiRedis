@@ -23,7 +23,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("io.lettuce:lettuce-core:6.0.2.RELEASE")
-	implementation ("com.google.code.gson:gson:2.8.7")
+	implementation ("com.google.code.gson:gson:2.8.7.RELEASE")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
