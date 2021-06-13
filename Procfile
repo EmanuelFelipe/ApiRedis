@@ -1,1 +1,2 @@
-web: java -jar build/libs/redis-1.0-SNAPSHOT.jar
+web: java -jar target/RedisApplication.kt
+
