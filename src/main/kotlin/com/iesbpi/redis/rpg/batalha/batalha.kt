@@ -31,6 +31,7 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
             val novoMonstro = RPG.criarMonstro(tipoPersonagem = TipoPersonagem.PERSONAGEM_CHEFE)
             novoMonstro.definirMonstro(jogador.nivel+3)
             logBatalha.mensagemInicio += "AOBA SUA BATALHA COMECOU"
+            return logBatalha
         }
     }
 

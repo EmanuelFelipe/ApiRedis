@@ -46,7 +46,7 @@ class Rpg {
 
         val novoPersonagem =if (tipoPersonagem == TipoPersonagem.PERSONAGEM_MONSTRO){
             PersonagemMonstro(
-                novaRaca = (0..1).random(),
+                novaRaca = 1,
                 (listaNomes).random() + (listaTitulos).random(),
                 elementoMonstro = (1..4).random(),
                 RPG
