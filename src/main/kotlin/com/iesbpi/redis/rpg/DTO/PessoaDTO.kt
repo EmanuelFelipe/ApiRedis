@@ -1,4 +1,4 @@
-package com.iesbpi.redis.pessoas
+package com.iesbpi.redis.rpg.DTO
 
 import org.springframework.stereotype.Repository
 

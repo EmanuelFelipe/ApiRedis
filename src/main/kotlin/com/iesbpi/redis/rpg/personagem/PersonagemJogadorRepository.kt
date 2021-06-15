@@ -9,5 +9,5 @@ import java.util.*
 interface PersonagemJogadorRepository: CrudRepository<PersonagemJogador, Int> {
 
     fun findByNome(nome: String): Optional<PersonagemJogador>
-    fun findByUserEmail(userEmail: String): PersonagemJogador
+    fun findByUserEmail(userEmail: String): PersonagemJogador?
 }

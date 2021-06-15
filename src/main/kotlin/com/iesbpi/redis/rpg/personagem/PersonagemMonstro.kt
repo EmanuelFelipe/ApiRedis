@@ -26,7 +26,7 @@ class PersonagemMonstro(
 
         this.maxAtaque = 1
 
-        if (raca == 1) {
+        if (raca == 1 || raca == 0) {
 
             this.maxVida = 5
             this.maxMana = 5

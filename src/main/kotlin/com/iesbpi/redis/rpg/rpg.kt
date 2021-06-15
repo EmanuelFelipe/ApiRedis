@@ -53,7 +53,7 @@ class Rpg {
             )
         } else{
             PersonagemMonstro(
-                novaRaca = 3,
+                novaRaca = 2,
                 (listaChefe).random(),
                 elementoMonstro = 4,
                 RPG

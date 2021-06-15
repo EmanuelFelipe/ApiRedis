@@ -3,6 +3,7 @@ package com.iesbpi.redis.config
 import br.iesb.poo.rpg.loja.Itens
 import br.iesb.poo.rpg.personagem.PersonagemJogador
 import br.iesb.poo.rpg.personagem.PersonagemMonstro
+import com.iesbpi.redis.rpg.DTO.BatalhaDTO
 import com.iesbpi.redis.rpg.personagem.PersonagemJogadorRepository
 import com.iesbpi.redis.rpg.Rpg
 import com.iesbpi.redis.rpg.TipoPersonagem
@@ -10,7 +11,8 @@ import com.iesbpi.redis.rpg.batalha.batalha
 //import com.iesbpi.redis.rpg.batalha.batalhaChefe
 import com.iesbpi.redis.rpg.personagem.PersonagemDTO
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 
@@ -23,37 +25,61 @@ class WebController0 {
     @Autowired
     lateinit var personagemJogadorRepository: PersonagemJogadorRepository
 
-    @GetMapping("/jogadores/{id}")
-    fun jogadores(@PathVariable id: Int): Any? {
+    @GetMapping("/jogadores/{email}")
+    fun jogadores(@PathVariable email: String): ResponseEntity<PersonagemJogador> {
 
-        val jogador = personagemJogadorRepository.findById(id)
-        //val listaJogador = RPG.jogadores
+        val novoJodor = personagemJogadorRepository.findByUserEmail(email)
 
-        if (jogador != null) {
-            return jogador
-        } else {
-            return "nao tem personagens criados"
+        if (novoJodor != null){
+            return ResponseEntity.ok(novoJodor)
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         }
+
+
+
     }
 
-    @GetMapping("/jogadores/user/{email}")
-    fun jogadoresUsuario(@PathVariable email: String): Int {
-        return personagemJogadorRepository.findByUserEmail(email).id
-    }
+    //@GetMapping("/jogadores/user/{email}")
+    //fun jogadoresUsuario(@PathVariable email: String): Int {
+    //    val id = personagemJogadorRepository.findByUserEmail(email)
+    //    if (id.isEmpty()){
+    //        return 0
+    //    }else{
+    //        return personagemJogadorRepository.findByUserEmail(email)[0].id
+    //    }
+    //}
 
-    @GetMapping("/jogadores/user/nome/{email}")
-    fun nomeJogador(@PathVariable email: String): String? {
-        return personagemJogadorRepository.findByUserEmail(email).nome
-    }
+    //@GetMapping("/jogadores/user/nome/{email}")
+    //fun nomeJogador(@PathVariable email: String): String? {
+    //    if(personagemJogadorRepository.findByUserEmail(email).isEmpty()){
+    //        return "sem jogador"
+    //    }else{
+    //        return personagemJogadorRepository.findByUserEmail(email)[0].nome
+//
+    //    }
+    //}
+//
+    //@GetMapping("/jogadores/user/xp/{email}")
+    //fun xpJogador(@PathVariable email: String): String {
+    //    if(personagemJogadorRepository.findByUserEmail(email).isEmpty()){
+    //        return "nível 0"
+    //    }else{
+    //        return "nível ${personagemJogadorRepository.findByUserEmail(email)[0].nivel}"
+//
+    //    }
+    //}
 
     @GetMapping("/jogador/deletar/{email}")
     fun deletar(@PathVariable email: String){
         val personagemDeletado = personagemJogadorRepository.findByUserEmail(email)
-        personagemJogadorRepository.delete(personagemDeletado)
+        if (personagemDeletado != null) {
+            personagemJogadorRepository.delete(personagemDeletado)
+        }
     }
 
     @PostMapping("/jogador/criarjogador")
-    fun criarJogador(@RequestBody personagem: PersonagemDTO): Int{
+    fun criarJogador(@RequestBody personagem: PersonagemDTO): Int?{
 
         val novomonstro : PersonagemMonstro = RPG.criarMonstro(tipoPersonagem = TipoPersonagem.PERSONAGEM_MONSTRO)
 
@@ -84,56 +110,50 @@ class WebController0 {
     }
 
     @GetMapping("/batalha/{n}/{idUrl}/{op}")
-    fun batalha(@PathVariable n: String?, @PathVariable idUrl: String, @PathVariable op: String?): String{
+    fun batalha(@PathVariable n: String?, @PathVariable idUrl: String, @PathVariable op: String?): BatalhaDTO? {
 
         val bt = n?.toInt()
         val idJogador = idUrl.toInt()
         val jogador = personagemJogadorRepository.findById(idJogador).get()
-        var option = op?.toInt()
+        val option = op?.toInt()
 
 
-        return if (jogador != null) {
             if (bt==0){
                 if(RPG.monstros.isEmpty()){
                     val novomonstro : PersonagemMonstro = RPG.criarMonstro(tipoPersonagem = TipoPersonagem.PERSONAGEM_MONSTRO)
                     novomonstro.definirMonstro(nivelMasmorra = jogador.nivel)
                     }
 
-                    val log: String = batalha(jogador, RPG.monstros[0], RPG, option, 0)
+                    val log: BatalhaDTO? = batalha(jogador, RPG.monstros[0], RPG, option, bt)
                     personagemJogadorRepository.save(jogador)
-                    log
+                    return log
                 }else {
                     if(RPG.monstros.isEmpty()){
                         val novomonstro : PersonagemMonstro = RPG.criarMonstro(tipoPersonagem = TipoPersonagem.PERSONAGEM_CHEFE)
                         novomonstro.definirMonstro(nivelMasmorra = jogador.nivel)
                     }
 
-                    val log: String = batalha(jogador, RPG.monstros[0], RPG, option, bt)
+                    val log: BatalhaDTO? = batalha(jogador, RPG.monstros[0], RPG, option, bt)
                     personagemJogadorRepository.save(jogador)
-                    log
+                    return log
                 }
-            } else {
-                "sem conteudo"
-            }
+
         }
 
-    @PostMapping("/loja/{idURL}/{opcao}")
-    fun loja(@PathVariable idURL: String, @PathVariable opcao: String?): String{
+    @GetMapping("/loja/{idURL}/{opcao}")
+    fun loja(@PathVariable idURL: String, @PathVariable opcao: String?): Int?{
 
         val idJogador = idURL.toInt()
         val jogador = personagemJogadorRepository.findById(idJogador).get()
-        val opcao = opcao.toString()
-        var log: String = ""
         if (jogador != null) {
-            val itens = Itens()
-            log = itens.efeito(jogador, opcao)
+            val itens = Itens().efeito(jogador, opcao)
             personagemJogadorRepository.save(jogador)
         }
-        return log
+        return 1
     }
 
     @GetMapping("/elemento/{idURL}/{elm}")
-    fun mudarElemento(@PathVariable idURL: String, @PathVariable elm: Int): String{
+    fun mudarElemento(@PathVariable idURL: String, @PathVariable elm: Int): String?{
         val idJogador = idURL.toInt()
         val jogador = personagemJogadorRepository.findById(idJogador).get()
 

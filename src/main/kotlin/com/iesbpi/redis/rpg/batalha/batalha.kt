@@ -2,14 +2,27 @@ package com.iesbpi.redis.rpg.batalha
 
 import br.iesb.poo.rpg.personagem.PersonagemJogador
 import br.iesb.poo.rpg.personagem.PersonagemMonstro
+import com.iesbpi.redis.rpg.DTO.BatalhaDTO
 import com.iesbpi.redis.rpg.Rpg
 import com.iesbpi.redis.rpg.TipoPersonagem
 
 
-fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, opt: Int?, tipoBt: Int?): String {
+fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, opt: Int?, tipoBt: Int?): BatalhaDTO? {
+
+    val logBatalha = BatalhaDTO("",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "")
 
     val racaMonstro = arrayOf("Orc", "Goblin", "Gnomio")
-    var log =
+    logBatalha.mensagemInicio =
         "--BATALHA DE NÚMERO ${jogador.batalhas}--\n" +
                 "--LOG DA BATALHA ENTRE ${jogador.nome} e ${racaMonstro[monstro.raca]} ${monstro.nome} DE NÍVEL ${monstro.nivel}--\n\n"
     if(tipoBt != 0){
@@ -17,7 +30,7 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
             RPG.monstros.removeAt(0)
             val novoMonstro = RPG.criarMonstro(tipoPersonagem = TipoPersonagem.PERSONAGEM_CHEFE)
             novoMonstro.definirMonstro(jogador.nivel+3)
-            return "AOBA SUA BATALHA COMECOU"
+            logBatalha.mensagemInicio += "AOBA SUA BATALHA COMECOU"
         }
     }
 
@@ -32,10 +45,9 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
     // FIM CÁLCULOS DE ATRIBUTOS
     // INÍCIO COMBATE
 
-    var turno = 1
-
     if (jogador.velocidade > monstro.velocidade) {
-        log += "[ * ] JOGADOR INICIOU O COMBATE\n\n"
+
+        logBatalha.mensagem = "[ * ] JOGADOR INICIOU O COMBATE\n\n"
 
         jogador.defesa = jogador.maxDefesa
         monstro.defesa = monstro.maxDefesa
@@ -46,7 +58,7 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
             1 -> danoJ = jogador.atacarPersonagem(jogador.maxAtaque, monstro.defesa) //Ataque Basico
             2 -> jogador.defesa = jogador.defender(jogador.defesa) //opcao pro personagem defender
             3 -> if (jogador.pontosMana <= 0) {
-                log += "\n--MANA INSUFICIENTE--\n"
+                logBatalha.mensagemMana = "\n--MANA INSUFICIENTE--\n"
                 jogador.pontosMana = 0
             } else {
                 if (jogador.elemento == 6) {
@@ -63,10 +75,7 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
                 }
             }
 
-            4 -> if ((1..10).random() > 8) {
-                log += "\n--VOCE NAO VAI CONSEGUI FUGIR SE SUAS PERNAS ESTIVEREM TREMENDO--\n"
-
-            } else if (jogador.velocidade > monstro.velocidade) {
+            4 ->{
                 RPG.monstros.removeAt(0)
                 val novomonstro: PersonagemMonstro =
                     RPG.criarMonstro(tipoPersonagem = TipoPersonagem.PERSONAGEM_MONSTRO)
@@ -75,8 +84,8 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
                 jogador.pontosVida = jogador.maxVida
                 jogador.batalhas++
 
-                log += "\n--FIM DO COMBATE JOGADOR METEU O PÉ--\n"
-                return log
+                logBatalha.mensagemFugir = "\n--FIM DO COMBATE JOGADOR METEU O PÉ--\n"
+                return logBatalha
             }
 
 
@@ -84,14 +93,14 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
 
         if (opt != 4) {
             monstro.pontosVida = monstro.pontosVida - danoJ
-            log += "TURNO ${turno}: JOGADOR ATACOU COM $danoJ MONSTRO FICOU COM ${monstro.pontosVida} DE VIDA\n"
+            logBatalha.mensagemTurnoJogador = "JOGADOR ATACOU COM $danoJ MONSTRO FICOU COM ${monstro.pontosVida} DE VIDA\n"
         }
 
         if (monstro.pontosVida <= 0) {
-            log += "\n[ = ] JOGADOR GANHOU\n"
-            log += monstro.derrota(RPG)
-            log += jogador.vitoria(monstro)
-            log += "\n--FIM DO COMBATE--\n"
+            logBatalha.mensagem = "\n[ = ] JOGADOR GANHOU\n"
+            logBatalha.mensagemMonstro = monstro.derrota(RPG)
+            logBatalha.mensagemVitoria = jogador.vitoria(monstro)
+            logBatalha.mensagemFim = "\n--FIM DO COMBATE--\n"
         } else {
             opcaoM = (1..3).random()
             elementoAtk = (1..5).random()
@@ -113,22 +122,21 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
             jogador.pontosVida = jogador.pontosVida - danoM
 
 
-            log += "TURNO ${turno}: MONSTRO ATACOU COM $danoM JOGADOR FICOU COM ${jogador.pontosVida} DE VIDA\n"
 
-            turno++
+            logBatalha.mensagemTurnoMonstro = "MONSTRO ATACOU COM $danoM JOGADOR FICOU COM ${jogador.pontosVida} DE VIDA\n"
+
 
             if (jogador.pontosVida <= 0) {
-                log += "\n[ = ] JOGADOR PERDEU\n"
-                log += jogador.derrota(RPG)
-
-                log += "\n--FIM DO COMBATE--\n"
+                logBatalha.mensagem = "\n[ = ] JOGADOR PERDEU\n"
+                logBatalha.mensagemDerrota = jogador.derrota(RPG)
+                logBatalha.mensagemFim = "\n--FIM DO COMBATE--\n"
             }
 
         }
 
 
     } else {
-        log += "[ * ] EMBOSCADA! MONSTRO INICIOU O COMBATE\n\n"
+        logBatalha.mensagem = "[ * ] EMBOSCADA! MONSTRO INICIOU O COMBATE\n\n"
 
 
         jogador.defesa = jogador.maxDefesa
@@ -156,12 +164,12 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
         jogador.pontosVida = jogador.pontosVida - danoM
 
 
-        log += "TURNO ${turno}: MONSTRO ATACOU COM $danoM JOGADOR FICOU COM ${jogador.pontosVida} DE VIDA\n"
+        logBatalha.mensagemTurnoMonstro = "MONSTRO ATACOU COM $danoM JOGADOR FICOU COM ${jogador.pontosVida} DE VIDA\n"
 
         if (jogador.pontosVida <= 0) {
-            log += "\n[ = ] JOGADOR PERDEU\n"
-            log += jogador.derrota(RPG)
-            log += "\n--FIM DO COMBATE--\n"
+            logBatalha.mensagem = "\n[ = ] JOGADOR PERDEU\n"
+            logBatalha.mensagemDerrota = jogador.derrota(RPG)
+            logBatalha.mensagemFim = "\n--FIM DO COMBATE--\n"
         } else {
 
             //TURNO JOGADOR
@@ -170,7 +178,7 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
                 1 -> danoJ = jogador.atacarPersonagem(jogador.maxAtaque, monstro.defesa) //Ataque Basico
                 2 -> jogador.defesa = jogador.defender(jogador.defesa) //opcao pro personagem defender
                 3 -> if (jogador.pontosMana <= 0) {
-                    log += "\n--MANA INSUFICIENTE--\n"
+                    logBatalha.mensagemMana= "\n--MANA INSUFICIENTE--\n"
                     jogador.pontosMana = 0
                 } else {
                     if (jogador.elemento == 6) {
@@ -186,24 +194,37 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
                         )
                     }
                 }
-                4 -> log += "\n--VOCE NAO VAI CONSEGUI FUGIR SE SUAS PERNAS ESTIVEREM TREMENDO--\n"
+                4 -> if(monstro.raca < 2){
+                    RPG.monstros.removeAt(0)
+                    val novomonstro: PersonagemMonstro =
+                        RPG.criarMonstro(tipoPersonagem = TipoPersonagem.PERSONAGEM_MONSTRO)
+                    novomonstro.definirMonstro(jogador.nivel)
+
+                    jogador.pontosVida = jogador.maxVida
+                    jogador.batalhas++
+
+                    logBatalha.mensagemFugir = "\n--FIM DO COMBATE JOGADOR METEU O PÉ--\n"
+                    return logBatalha
+                }else{
+                    logBatalha.mensagemFugir = "\n--VOCÊ NÃO CONSEGUE FUGIR COM AS PERNAS TREMENDO--\n"
+                }
 
             }
+
 
 
             if (opt != 4) {
                 monstro.pontosVida = monstro.pontosVida - danoJ
-                log += "TURNO ${turno}: JOGADOR ATACOU COM $danoJ MONSTRO FICOU COM ${monstro.pontosVida} DE VIDA\n"
+                logBatalha.mensagemTurnoJogador = "JOGADOR ATACOU COM $danoJ MONSTRO FICOU COM ${monstro.pontosVida} DE VIDA\n"
             }
 
-            turno++
 
             if (monstro.pontosVida <= 0) {
-                log += "\n[ = ] JOGADOR GANHOU\n"
-                log += monstro.derrota(RPG)
-                log += jogador.vitoria(monstro)
+                logBatalha.mensagem = "\n[ = ] JOGADOR GANHOU\n"
+                logBatalha.mensagemMonstro = monstro.derrota(RPG)
+                logBatalha.mensagemVitoria = jogador.vitoria(monstro)
 
-                log += "\n--FIM DO COMBATE--\n"
+                logBatalha.mensagemFim = "\n--FIM DO COMBATE--\n"
             }
 
         }
@@ -219,7 +240,7 @@ fun batalha(jogador: PersonagemJogador, monstro: PersonagemMonstro, RPG: Rpg, op
         jogador.pontosMana = jogador.maxMana
         jogador.batalhas++
     }
-    return log
+    return logBatalha
 }
 
 
