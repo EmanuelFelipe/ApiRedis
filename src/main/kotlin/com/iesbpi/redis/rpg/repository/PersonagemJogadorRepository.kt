@@ -1,4 +1,4 @@
-package com.iesbpi.redis.rpg.personagem
+package com.iesbpi.redis.rpg.repository
 
 import br.iesb.poo.rpg.personagem.PersonagemJogador
 import org.springframework.data.repository.CrudRepository

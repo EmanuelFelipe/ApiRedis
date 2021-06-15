@@ -22,9 +22,9 @@ import org.springframework.web.servlet.function.ServerResponse
 @Configuration
 class RedisConfig: CachingConfigurerSupport() {
 
-    companion object{
-        private val log = LoggerFactory.getLogger(javaClass)
-    }
+//    companion object{
+//        private val log = LoggerFactory.getLogger(javaClass)
+//    }
 
     @Bean
     fun redisConnectionFactory(): LettuceConnectionFactory {

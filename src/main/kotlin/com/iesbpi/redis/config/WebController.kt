@@ -4,7 +4,7 @@ import br.iesb.poo.rpg.loja.Itens
 import br.iesb.poo.rpg.personagem.PersonagemJogador
 import br.iesb.poo.rpg.personagem.PersonagemMonstro
 import com.iesbpi.redis.rpg.DTO.BatalhaDTO
-import com.iesbpi.redis.rpg.personagem.PersonagemJogadorRepository
+import com.iesbpi.redis.rpg.repository.PersonagemJogadorRepository
 import com.iesbpi.redis.rpg.Rpg
 import com.iesbpi.redis.rpg.TipoPersonagem
 import com.iesbpi.redis.rpg.batalha.batalha

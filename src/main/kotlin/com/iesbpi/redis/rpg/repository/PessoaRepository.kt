@@ -1,4 +1,4 @@
-package com.iesbpi.redis.pessoas
+package com.iesbpi.redis.rpg.repository
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
